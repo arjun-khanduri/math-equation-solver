@@ -1,8 +1,42 @@
-import React from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import {
+	Form,
+	Row,
+	Col,
+	Button,
+	Image,
+	Alert,
+	Modal
+} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Output(props) {
+
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const modalBody = () => {
+		if (props.result) {
+			return (
+				<div>
+					<Image alt="selected image" src={`data:image/png;base64,${props.curve}`} fluid />
+				</div>
+			);
+		}
+		else {
+			return (
+				<div>
+					<Alert variant="danger">
+						Curve not available!
+					</Alert>
+				</div>
+			);
+		}
+	}
+
+	const handleClose = () => {
+		setModalVisible(false)
+	}
+
 	return (
 		<div className="offset-md-3">
 			<Form>
@@ -23,13 +57,34 @@ function Output(props) {
 					</Col>
 				</Form.Group>
 			</Form>
-			{props.result ? (
-				<div>
-				<Button>Display curve</Button>
-				<img src={`data:image/png;base64,${props.curve}`} alt=""/>
-				</div>
-				) : null
+			{props.curve ?
+				<Button variant="success"
+					onClick={() => setModalVisible(true)}>
+					Display curve
+				</Button>
+				:
+				null
 			}
+			<Modal
+				show={modalVisible}
+				onHide={handleClose}
+				size="lg"
+				aria-labelledby="contained-modal-title-vcenter"
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						{props.curve ? "Curve of equation" : "Error in extension"}
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					{modalBody()}
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
 		</div>
 	);
 }
