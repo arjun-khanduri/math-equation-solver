@@ -23,6 +23,13 @@ function Output(props) {
 					</Col>
 				</Form.Group>
 			</Form>
+			{props.result ? (
+				<div>
+				<Button>Display curve</Button>
+				<img src={`data:image/png;base64,${props.curve}`} alt=""/>
+				</div>
+				) : null
+			}
 		</div>
 	);
 }

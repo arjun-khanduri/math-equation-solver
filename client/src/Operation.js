@@ -10,6 +10,7 @@ class Operation extends Component {
       evaluate: false,
       equation: "",
       result: "",
+      curve: ""
     };
   }
 
@@ -35,20 +36,13 @@ class Operation extends Component {
           evaluate: false,
           equation: data1["equation"],
           result: data1["solution"],
+          curve: data1["curve"]
         });
         console.log(this.state);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error: ", error);
       });
-  };
-
-  onClear = () => {
-    this.setState({
-      evaluate: false,
-      equation: "",
-      result: "",
-    });
   };
 
   onEval = () => {
@@ -74,6 +68,7 @@ class Operation extends Component {
         <Output
           equation={this.state.equation}
           result={this.state.result}
+          curve={this.state.curve}
         />
       </div>
     );

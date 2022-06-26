@@ -36,9 +36,12 @@ class Solve(Resource):
         shutil.move('input.png', 'image')
         shutil.move('segmented_characters.csv', 'image')
         equation, solution = calculate(operation)
+        with open('solution.png', mode='rb') as file:
+            curve = file.read()
         return json.dumps({
             'equation': equation,
-            'solution': str(solution)
+            'solution': str(solution),
+            'curve': base64.encodebytes(curve).decode('utf-8')
         })
 
 
