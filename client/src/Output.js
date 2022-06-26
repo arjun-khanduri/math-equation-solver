@@ -38,19 +38,19 @@ function Output(props) {
 	}
 
 	return (
-		<div className="offset-md-3">
+		<div className="offset-md-2">
 			<Form>
 				<Form.Group as={Row} controlId="equation">
-					<Form.Label column sm="3">
-						Equation
+					<Form.Label column sm="4">
+						<strong>Equation</strong>
 					</Form.Label>
 					<Col sm="5">
 						<Form.Control readOnly placeholder={props.equation} />
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row} controlId="result">
-					<Form.Label column sm="3">
-						Result
+					<Form.Label column sm="4">
+						<strong>Result</strong>
 					</Form.Label>
 					<Col sm="5">
 						<Form.Control as="textarea" readOnly placeholder={props.result} />
