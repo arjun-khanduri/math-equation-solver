@@ -1,6 +1,8 @@
 from sympy.abc import *
 from sympy import solve
 from sympy.parsing.sympy_parser import parse_expr
+from sympy.plotting import plot
+from PIL import Image
 import json
 
 
@@ -10,10 +12,11 @@ def solveAlgebraic(equation, degree):
         lhs = parse_expr(equation.split("=")[0])
         rhs = parse_expr(equation.split("=")[1])
         solution = solve(lhs-rhs)
-        return solution
     except:
         return 'Invalid Equation'
-
+    p = plot(str(lhs-rhs), show=False)
+    p.save(path='solution.png')
+    return solution
 
 def solveArithmetic(expression):
     def operate(fb, sb, op):
@@ -58,40 +61,6 @@ def solveArithmetic(expression):
 def calculate(operation):
     string, head = '', None
     temp = string = str(operation)
-    if 'I' in string:
-        string = string.replace('I', '1')
-    if 'D' in string:
-        string = string.replace('D', '0')
-    if 'Q' in string:
-        string = string.replace('Q', '0')
-    if 'G' in string:
-        string = string.replace('G', '6')
-    if 'g' in string:
-        string = string.replace('g', '9')
-    if 'b' in string:
-        string = string.replace('b', '6')
-    if 'B' in string:
-        string = string.replace('B', '8')
-    if 'Z' in string:
-        string = string.replace('Z', '2')
-    if 't' in string:
-        string = string.replace('t', '+')
-    if 'M' in string:
-        string = string.replace('M', '-')
-    if 'W' in string:
-        string = string.replace('W', '-')
-    if 'P' in string:
-        string = string.replace('P', '-')
-    if 'A' in string:
-        string = string.replace('A', '-')
-    if 'L' in string:
-        string = string.replace('L', '/')
-    if 'S' in string:
-        string = string.replace('S', '5')
-    if 's' in string:
-        string = string.replace('s', '5')
-    if 'a' in string:
-        string = string.replace('a', '-')
     if '=' not in string:
         if 'x' in string:
             string = string.replace('x', '*')
