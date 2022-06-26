@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Output(props) {
@@ -19,7 +19,7 @@ function Output(props) {
 						Result
 					</Form.Label>
 					<Col sm="5">
-						<Form.Control readOnly placeholder={props.result} />
+						<Form.Control as="textarea" readOnly placeholder={props.result} />
 					</Col>
 				</Form.Group>
 			</Form>
