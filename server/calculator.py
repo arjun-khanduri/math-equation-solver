@@ -60,10 +60,8 @@ def solveArithmetic(expression):
 
 def calculate(operation):
     string, head = '', None
-    temp = string = str(operation)
+    string = str(operation)
     if '=' not in string:
-        if 'x' in string:
-            string = string.replace('x', '*')
         if 'X' in string:
             string = string.replace('X', '*')
         try:
@@ -75,6 +73,7 @@ def calculate(operation):
     operation = string
     string = ''
     degree = 1
+    c = 0
     for k in operation:
         if head is None:
             head = k
@@ -91,7 +90,10 @@ def calculate(operation):
             head = k
             added = '*' + k
             string += added
-
+        elif c != 0 and k.isnumeric() and head.isnumeric():
+            head = k
+            string += head
+        c += 1
     if '=' not in string:
         return string, solveArithmetic(string)
     else:
