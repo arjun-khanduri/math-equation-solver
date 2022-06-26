@@ -154,14 +154,17 @@ def letter_seg(lines_img, x_lines, i):
 
     word = 1
     letter_index = 0
+    name = 97
     for e in range(len(letter)):
         if(letter[e][0] < x_linescopy[0]):
             letter_index += 1
             letter_img_tmp = lines_img[i][letter[e][1]-5:letter[e][1] +
                                           letter[e][3]+5, letter[e][0]-5:letter[e][0]+letter[e][2]+5]
             letter_img = letter_img_tmp
-            cv2.imwrite(os.path.join(OUTPUT_DIR, str(i+1)+'_' +
-                        str(word)+'_'+str(letter_index)+'.png'), 255-letter_img)
+            # cv2.imwrite(os.path.join(OUTPUT_DIR, str(i+1)+'_' +
+            #             str(word)+'_'+str(letter_index)+'.png'), 255-letter_img)
+            # cv2.imwrite(os.path.join(OUTPUT_DIR, chr(name), 255-letter_img)
+            # name += 1
         else:
             x_linescopy.pop(0)
             word += 1
@@ -170,13 +173,16 @@ def letter_seg(lines_img, x_lines, i):
                                           letter[e][3]+5, letter[e][0]-5:letter[e][0]+letter[e][2]+5]
             letter_img = cv2.resize(letter_img_tmp, dsize=(
                 28, 28), interpolation=cv2.INTER_AREA)
-            cv2.imwrite(os.path.join(OUTPUT_DIR, str(i+1)+'_' +
-                        str(word)+'_'+str(letter_index)+'.png'), 255-letter_img)
+            # cv2.imwrite(os.path.join(OUTPUT_DIR, str(i+1)+'_' +
+            #             str(word)+'_'+str(letter_index)+'.png'), 255-letter_img)
+        cv2.imwrite(os.path.join(OUTPUT_DIR, chr(name)+'.png'), 255-letter_img)
+        name += 1
 
 
 def image_segmentation(filepath):
     print("\n........Program Initiated.......\n")
     src_img = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+    # src_img = cv2.fastNlMeansDenoising(src_img, None, 20, 7, 21)
     orig_height, orig_width = src_img.shape
 
     print("\n Resizing Image........")
@@ -194,6 +200,7 @@ def image_segmentation(filepath):
 
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
     final_thr = cv2.morphologyEx(bin_img, cv2.MORPH_CLOSE, kernel)
+
     contr_retrival = final_thr.copy()
     print("Character Segmentation")
     count_x = np.zeros(shape=(height))
@@ -226,6 +233,7 @@ def image_segmentation(filepath):
 
     contours, hierarchy = cv2.findContours(
         contr_retrival, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
     cv2.drawContours(src_img, contours, -1, (0, 255, 0), 1)
 
     mean_lttr_width = letter_width(contours)
@@ -241,6 +249,7 @@ def image_segmentation(filepath):
         letter_seg(lines_img, x_lines, i)
     contours, hierarchy = cv2.findContours(
         bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
     for cnt in contours:
         if cv2.contourArea(cnt) > 20:
             x, y, w, h = cv2.boundingRect(cnt)
