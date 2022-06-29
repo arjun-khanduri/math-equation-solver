@@ -13,6 +13,8 @@ warnings.filterwarnings("ignore")
 root = os.getcwd()
 if 'segmented' in os.listdir():
     shutil.rmtree('segmented')
+if 'solution.png' in os.listdir():
+    os.remove('solution.png')
 os.mkdir('segmented')
 SEGMENTED_OUTPUT_DIR = os.path.join(root, 'segmented')
 MODEL_PATH = os.path.join(root, 'model.h5')
@@ -74,7 +76,6 @@ def processor(INPUT_IMAGE):
     model = load_model(MODEL_PATH)
     results = model.predict(X_data)
     results = np.argmax(results, axis=1)
-    print(results)
     parsed_str = ""
     for r in results:
         parsed_str += code2char[r]

@@ -27,6 +27,8 @@ class Solve(Resource):
             shutil.rmtree('image')
         if 'segmented' in os.listdir():
             shutil.rmtree('segmented')
+        if 'solution.png' in os.listdir():
+            os.remove('solution.png')
         os.mkdir('segmented')
         operation = main(BytesIO(base64.urlsafe_b64decode(args['image'])))
         print(operation)
@@ -36,12 +38,14 @@ class Solve(Resource):
         shutil.move('input.png', 'image')
         shutil.move('segmented_characters.csv', 'image')
         equation, solution = calculate(operation)
-        with open('solution.png', mode='rb') as file:
-            curve = file.read()
+        curve = None
+        if 'solution.png' in os.listdir():
+            with open('solution.png', mode='rb') as file:
+                curve = file.read()
         return json.dumps({
             'equation': equation,
             'solution': str(solution),
-            'curve': base64.encodebytes(curve).decode('utf-8')
+            'curve': base64.encodebytes(curve).decode('utf-8') if curve else None
         })
 
 
