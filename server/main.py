@@ -8,6 +8,7 @@ from tensorflow.python.keras.models import load_model
 import numpy as np
 import cv2
 import warnings
+import simpl as o
 warnings.filterwarnings("ignore")
 
 root = os.getcwd()
@@ -21,7 +22,7 @@ MODEL_PATH = os.path.join(root, 'model.h5')
 mapper = os.path.join(root, 'mapper.csv')
 
 
-def img2emnist(filepath, char_code):
+def img2code(filepath, char_code):
     img = Image.open(filepath).resize((28, 28))
     inv_img = ImageOps.invert(img)
     flatten = np.array(inv_img).flatten() / 255
@@ -45,7 +46,6 @@ def processor(INPUT_IMAGE):
     for file in files:
         filename = os.path.join(SEGMENTED_OUTPUT_DIR, file)
         img = cv2.imread(filename, 0)
-
         kernel = np.ones((2, 2), np.uint8)
         dilation = cv2.erode(img, kernel, iterations=1)
         cv2.imwrite(filename, dilation)
@@ -61,7 +61,7 @@ def processor(INPUT_IMAGE):
         files = sorted(list(os.walk(SEGMENTED_OUTPUT_DIR))[0][2])
         for f in files:
             file_path = os.path.join(SEGMENTED_OUTPUT_DIR, f)
-            csv = img2emnist(file_path, -1)
+            csv = img2code(file_path, -1)
             print(csv, file=f_test)
 
     data = pd.read_csv('segmented_characters.csv')
@@ -75,7 +75,8 @@ def processor(INPUT_IMAGE):
         code2char[row['id']] = row['char']
     model = load_model(MODEL_PATH)
     results = model.predict(X_data)
-    results = np.argmax(results, axis=1)
+    results = o.f(np.argmax(results, axis=1))
+    print(results)
     parsed_str = ""
     for r in results:
         parsed_str += code2char[r]
